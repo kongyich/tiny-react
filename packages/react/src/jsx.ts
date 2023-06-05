@@ -4,7 +4,7 @@ import {
   Key,
   Ref,
   Props,
-  ReactElement,
+  ReactElementType,
   ElementType
 } from 'shared/ReactTypes';
 
@@ -13,7 +13,7 @@ const ReactElement = function (
   key: Key,
   ref: Ref,
   props: Props
-): ReactElement {
+): ReactElementType {
   const element = {
     $$typeof: REACT_ELEMENT_TYPE,
     type,
@@ -32,7 +32,7 @@ export const jsx = function (
 ) {
   let key: Key = null;
   const props: Props = {};
-  const ref: Ref = null;
+  let ref: Ref = null;
 
   for (const prop in config) {
     const val = config[prop];
