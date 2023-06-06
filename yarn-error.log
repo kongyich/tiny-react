@@ -1,0 +1,54 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn add create-react-app@5.0.1
+
+PATH: 
+  /usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  16.14.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/Users/kongyi/Library/Caches/Yarn/v6/npm-glob-8.1.0-d388f656593ef708ee3e34640fdfb99a9fd1c33e-integrity/node_modules/glob/README.md' -> '/Users/kongyi/my_items/mini-react/node_modules/@rollup/plugin-commonjs/node_modules/glob/README.md'
+
+npm manifest: 
+  {
+  	"name": "mini-react",
+  	"version": "1.0.0",
+  	"description": "",
+  	"main": "index.js",
+  	"scripts": {
+  		"lint": "eslint --ext .js,.ts,.jsx,.tsx --fix --quiet ./packages",
+  		"build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/react.config.js",
+  		"test": "echo \"Error: no test specified\" && exit 1"
+  	},
+  	"keywords": [],
+  	"author": "",
+  	"license": "ISC",
+  	"devDependencies": {
+  		"@commitlint/cli": "^17.6.3",
+  		"@commitlint/config-conventional": "^17.6.3",
+  		"@rollup/plugin-commonjs": "^25.0.0",
+  		"@typescript-eslint/eslint-plugin": "^5.59.7",
+  		"commitlint": "^17.6.3",
+  		"eslint": "^8.41.0",
+  		"eslint-config-prettier": "^8.8.0",
+  		"eslint-plugin-prettier": "^4.2.1",
+  		"husky": "^8.0.1",
+  		"prettier": "^2.8.8",
+  		"rimraf": "^5.0.1",
+  		"rollup-plugin-generate-package-json": "^3.2.0",
+  		"rollup-plugin-typescript2": "^0.34.1"
+  	}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
