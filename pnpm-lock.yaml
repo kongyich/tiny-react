@@ -57,6 +57,12 @@ importers:
         specifier: workspace:*
         version: link:../shared
 
+  packages/reconciler:
+    dependencies:
+      shared:
+        specifier: 'workspace: *'
+        version: link:../shared
+
   packages/shared: {}
 
 packages:
