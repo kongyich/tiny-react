@@ -1,42 +1,49 @@
 import { Props, Key, Ref } from 'shared/ReactTypes';
 import { WorkTags } from './workTags';
+import { Flags, NoFlags } from './fiberFlags';
 
 export class FiberNode {
-  type: any
-  tag: WorkTags
-  pendingProps: Props
-  key: Key
-  stateNode: any
-  ref: Ref
+  type: any;
+  tag: WorkTags;
+  pendingProps: Props;
+  key: Key;
+  stateNode: any;
+  ref: Ref;
 
-  return: FiberNode | null
-  sibling: FiberNode | null
-  child: FiberNode | null
-  index: number
+  return: FiberNode | null;
+  sibling: FiberNode | null;
+  child: FiberNode | null;
+  index: number;
 
-  memoizedProps: Props | null
+  memoizedProps: Props | null;
+
+  alternate: FiberNode | null
+  flags: Flags
 
   constructor(tag: WorkTags, pendingProps: Props, key: Key) {
     // 实例
     this.tag = tag;
     this.key = key;
     // <div></div> div的dom
-    this.stateNode = null
-    this.type = null
+    this.stateNode = null;
+    this.type = null;
 
     // 节点间的关系 树状结构
     // 指向父fiberNode
-    this.return = null
+    this.return = null;
     // 兄弟
-    this.sibling = null
+    this.sibling = null;
     // 子节点
-    this.child = null
-    this.index = 0
+    this.child = null;
+    this.index = 0;
 
-    this.ref = null
+    this.ref = null;
 
     // 作为工作单元
-    this.pendingProps = pendingProps
-    this.memoizedProps = null
+    this.pendingProps = pendingProps;
+    this.memoizedProps = null;
+
+    this.alternate = null
+    this.flags = NoFlags
   }
 }
