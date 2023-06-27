@@ -43,7 +43,9 @@ export class FiberNode {
 		this.ref = null;
 
 		// 作为工作单元
+		// 工作时的props
 		this.pendingProps = pendingProps;
+		// 处理后的props
 		this.memoizedProps = null;
 		this.memoizedState = null;
 		this.updateQueue = null;
