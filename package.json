@@ -28,6 +28,7 @@
 		"rollup-plugin-typescript2": "^0.34.1"
 	},
 	"dependencies": {
+		"@rollup/plugin-replace": "^5.0.2",
 		"create-react-app": "5.0.1"
 	}
 }

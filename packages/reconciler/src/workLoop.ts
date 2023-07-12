@@ -38,6 +38,9 @@ function renderRoot(root: FiberRootNode) {
 		try {
 			workLoop();
 		} catch (e) {
+			if (__DEV__) {
+				console.warn('workLoop发生错误');
+			}
 			workInProgress = null;
 		}
 	} while (true);
