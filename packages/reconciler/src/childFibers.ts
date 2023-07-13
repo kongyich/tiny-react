@@ -41,7 +41,9 @@ function childReconciler(shouldTrackEffects: boolean) {
     if (typeof newChild === 'object' && newChild !== null) {
       switch (newChild.$$typeof) {
         case REACT_ELEMENT_TYPE:
-          return reconcilerSingleElement();
+          return placeSingleChild(
+            reconcilerSingleElement(returnFiber, currentFiber, newChild)
+          );
         default:
           if (__DEV__) {
             console.warn('未实现的reconciler类型');
@@ -50,8 +52,16 @@ function childReconciler(shouldTrackEffects: boolean) {
     }
 
     if (typeof newChild === 'string' && newChild !== null) {
-      return reconcilerSingleTextNode();
+      return placeSingleChild(
+        reconcilerSingleTextNode(returnFiber, currentFiber, newChild)
+      );
     }
+
+    if (__DEV__) {
+      console.warn('未实现的reconciler类型', newChild);
+    }
+
+    return null;
   };
 }
 
