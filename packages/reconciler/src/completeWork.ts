@@ -1,3 +1,4 @@
+import { Container } from 'dom/src/hostConfig';
 import { FiberNode } from './fiber';
 import { NoFlags } from './fiberFlags';
 import {
@@ -50,7 +51,7 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-function appendAllChildren(parent: FiberNode, wip: FiberNode) {
+function appendAllChildren(parent: Container, wip: FiberNode) {
 	let node = wip.child;
 	if (node?.tag === HostComponent || node?.tag === HostText) {
 		appendInitialChild(parent, node.stateNode);
