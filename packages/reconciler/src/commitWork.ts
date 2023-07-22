@@ -2,7 +2,6 @@ import { FiberNode, FiberRootNode } from './fiber';
 import { MutationMask, NoFlags, Placement } from './fiberFlags';
 import { Container, appendChildToContainer } from 'hostConfig';
 import { HostComponent, HostRoot, HostText } from './workTags';
-import { Container } from 'hostConfig';
 
 let nextEffect: FiberNode | null = null;
 export function commitMutationEffects(finishedWork: FiberNode) {
@@ -13,7 +12,7 @@ export function commitMutationEffects(finishedWork: FiberNode) {
 		const child: FiberNode | null = nextEffect.child;
 
 		if (
-			nextEffect.subtreeFlags & (MutationMask !== NoFlags) &&
+			(nextEffect.subtreeFlags & MutationMask) !== NoFlags &&
 			child !== null
 		) {
 			nextEffect = child;
@@ -60,7 +59,7 @@ const commitPlacement = (finishedWork: FiberNode) => {
 };
 
 function getHostParent(fiber: FiberNode): Container {
-	const parent = fiber.parent;
+	let parent = fiber.parent;
 
 	while (parent) {
 		const parentTag = parent.tag;

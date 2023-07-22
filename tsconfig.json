@@ -13,7 +13,7 @@
 		"esModuleInterop": true,
 		"noEmit": true,
 		"noUnusedLocals": true,
-		"noUnusedParameters": true,
+		"noUnusedParameters": false,
 		"noImplicitReturns": false,
 		"skipLibCheck": true,
 		"baseUrl": "./packages",

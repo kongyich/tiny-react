@@ -18,4 +18,4 @@ export function createTextInstance(content: string) {
   return document.createTextNode(content);
 }
 
-export const appendChildToContainer = appendInitChild;
+export const appendChildToContainer = appendInitialChild;

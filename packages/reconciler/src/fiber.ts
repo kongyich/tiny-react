@@ -1,8 +1,7 @@
-import { Props, Key, Ref } from 'shared/ReactTypes';
+import { Props, Key, Ref, ReactElementType } from 'shared/ReactTypes';
 import { FunctionComponent, HostComponent, WorkTags } from './workTags';
 import { Flags, NoFlags } from './fiberFlags';
 import { Container } from 'hostConfig';
-import { REACT_ELEMENT_TYPE } from '../../shared/ReactSymbols';
 
 export class FiberNode {
 	type: any;
@@ -15,6 +14,7 @@ export class FiberNode {
 	return: FiberNode | null;
 	sibling: FiberNode | null;
 	child: FiberNode | null;
+	parent: FiberNode | null;
 	index: number;
 
 	memoizedProps: Props | null;
@@ -40,6 +40,7 @@ export class FiberNode {
 		this.sibling = null;
 		// 子节点
 		this.child = null;
+		this.parent = null;
 		this.index = 0;
 
 		this.ref = null;
@@ -100,7 +101,7 @@ export const createWorkInProgress = (
 	return wip;
 };
 
-export function createFiberFromElement(element: REACT_ELEMENT_TYPE) {
+export function createFiberFromElement(element: ReactElementType) {
 	const { type, key, props } = element;
 	let fiberTag: WorkTags = FunctionComponent;
 
