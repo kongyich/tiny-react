@@ -19,16 +19,13 @@ export function scheduleUpdateOnFiber(fiber: FiberNode) {
 function markUpdateFromFiberToRoot(fiber: FiberNode) {
 	let node = fiber;
 	let parent = node.return;
-
 	while (parent !== null) {
 		node = parent;
 		parent = node.return;
 	}
-
 	if (node.tag === HostRoot) {
 		return node.stateNode;
 	}
-
 	return null;
 }
 
@@ -91,7 +88,6 @@ function workLoop() {
 function performUnitOfWork(fiber: FiberNode) {
 	const next = beginWork(fiber);
 	fiber.memoizedProps = fiber.pendingProps;
-
 	if (next === null) {
 		completeUnitOfWork(fiber);
 	} else {
