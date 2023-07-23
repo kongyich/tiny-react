@@ -5,7 +5,7 @@ import {
 	appendInitialChild,
 	createInstance,
 	createTextInstance
-} from './hostConfig';
+} from 'hostConfig';
 import { HostComponent, HostRoot, HostText } from './workTags';
 
 export const completeWork = (wip: FiberNode) => {
@@ -51,27 +51,32 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-function appendAllChildren(parent: Container, wip: FiberNode) {
-	let node = wip.child;
-	if (node?.tag === HostComponent || node?.tag === HostText) {
-		appendInitialChild(parent, node.stateNode);
-	} else if (node.child !== null) {
-		node.child.return = node;
-		node = node.child;
-		continue;
-	}
+const appendAllChildren = (parent: Container, workInProgress: FiberNode) => {
+	// 遍历workInProgress所有子孙 DOM元素，依次挂载
+	let node = workInProgress.child;
+	while (node !== null) {
+		if (node.tag === HostComponent || node.tag === HostText) {
+			appendInitialChild(parent, node.stateNode);
+		} else if (node.child !== null) {
+			node.child.return = node;
+			node = node.child;
+			continue;
+		}
 
-	if (node === wip) return;
-
-	while (node.sibling === null) {
-		if (node.return === null || node.return === wip) {
+		if (node === workInProgress) {
 			return;
 		}
-		node = node.return;
+
+		while (node.sibling === null) {
+			if (node.return === null || node.return === workInProgress) {
+				return;
+			}
+			node = node.return;
+		}
+		node.sibling.return = node.return;
+		node = node.sibling;
 	}
-	node.sibling.return = node.return;
-	node = node.sibling;
-}
+};
 
 function bubbleProperties(wip: FiberNode) {
 	let subtreeFlags = NoFlags;

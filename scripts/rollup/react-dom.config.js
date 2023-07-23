@@ -1,13 +1,15 @@
 import { getPackageJSON, resolvePkgPath, getBaseRollupPlugins } from './utils';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 import alias from '@rollup/plugin-alias';
+
 const { name, module } = getPackageJSON('dom');
-// react-dom 包的路径
+// react-dom包的路径
 const pkgPath = resolvePkgPath(name);
-// react-dom 产物路径
+// react-dom产物路径
 const pkgDistPath = resolvePkgPath(name, true);
 
 export default [
+	// react-dom
 	{
 		input: `${pkgPath}/${module}`,
 		output: [
@@ -24,6 +26,7 @@ export default [
 		],
 		plugins: [
 			...getBaseRollupPlugins(),
+			// webpack resolve alias
 			alias({
 				entries: {
 					hostConfig: `${pkgPath}/src/hostConfig.ts`

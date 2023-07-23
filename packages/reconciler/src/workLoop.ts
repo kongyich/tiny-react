@@ -2,7 +2,7 @@ import { beginWork } from './beginWork';
 import { commitMutationEffects } from './commitWork';
 import { completeWork } from './completeWork';
 import { FiberNode, FiberRootNode, createWorkInProgress } from './fiber';
-import { MutationMask, NoFlags, Flags } from './fiberFlags';
+import { MutationMask, NoFlags } from './fiberFlags';
 import { HostRoot } from './workTags';
 // 当前正在执行fiberNode
 let workInProgress: FiberNode | null = null;
@@ -53,7 +53,7 @@ function renderRoot(root: FiberRootNode) {
 	commitRoot(root);
 }
 
-function commitRoot(root: FiberNode) {
+function commitRoot(root: FiberRootNode) {
 	const finishedWork = root.finishedWork;
 
 	if (finishedWork === null) return;

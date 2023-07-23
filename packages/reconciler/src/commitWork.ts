@@ -58,7 +58,7 @@ const commitPlacement = (finishedWork: FiberNode) => {
 	}
 };
 
-function getHostParent(fiber: FiberNode): Container {
+function getHostParent(fiber: FiberNode): Container | null {
 	let parent = fiber.parent;
 
 	while (parent) {
