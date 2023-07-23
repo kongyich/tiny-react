@@ -12,16 +12,17 @@ export const completeWork = (wip: FiberNode) => {
 	// node
 	const newProps = wip.pendingProps;
 	const current = wip.alternate;
-
+	console.log(wip, 'wip');
 	switch (wip.tag) {
 		case HostComponent:
-			if (current !== null || !wip.stateNode) {
+			if (current !== null || wip.stateNode) {
 				// update
 			} else {
 				// mount
 				// 构建DOM
 				const instance = createInstance(wip.type);
 				// 将DOM插入DOM树中
+				console.log(instance, 'pppppp');
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
 			}
