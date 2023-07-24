@@ -12,17 +12,15 @@ export const completeWork = (wip: FiberNode) => {
 	// node
 	const newProps = wip.pendingProps;
 	const current = wip.alternate;
-	console.log(wip, 'wip');
 	switch (wip.tag) {
 		case HostComponent:
-			if (current !== null || wip.stateNode) {
+			if (current !== null && wip.stateNode) {
 				// update
 			} else {
 				// mount
 				// 构建DOM
 				const instance = createInstance(wip.type);
 				// 将DOM插入DOM树中
-				console.log(instance, 'pppppp');
 				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
 			}
@@ -52,27 +50,28 @@ export const completeWork = (wip: FiberNode) => {
 	}
 };
 
-const appendAllChildren = (parent: Container, workInProgress: FiberNode) => {
+const appendAllChildren = (parent: Container, wip: FiberNode) => {
 	// 遍历workInProgress所有子孙 DOM元素，依次挂载
-	let node = workInProgress.child;
+	let node = wip.child;
+
 	while (node !== null) {
 		if (node.tag === HostComponent || node.tag === HostText) {
-			appendInitialChild(parent, node.stateNode);
+			appendInitialChild(parent, node?.stateNode);
 		} else if (node.child !== null) {
 			node.child.return = node;
 			node = node.child;
 			continue;
 		}
 
-		if (node === workInProgress) {
+		if (node === wip) {
 			return;
 		}
 
 		while (node.sibling === null) {
-			if (node.return === null || node.return === workInProgress) {
+			if (node.return === null || node.return === wip) {
 				return;
 			}
-			node = node.return;
+			node = node?.return;
 		}
 		node.sibling.return = node.return;
 		node = node.sibling;

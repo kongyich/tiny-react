@@ -63,21 +63,17 @@ function getHostParent(fiber: FiberNode): Container | null {
 
 	while (parent) {
 		const parentTag = parent.tag;
-
-		// HostComponent
+		// HostComponent HostRoot
 		if (parentTag === HostComponent) {
 			return parent.stateNode as Container;
 		}
-
 		if (parentTag === HostRoot) {
 			return (parent.stateNode as FiberRootNode).container;
 		}
-
 		parent = parent.return;
 	}
-
 	if (__DEV__) {
-		console.warn('未找到Host Parent');
+		console.warn('未找到host parent');
 	}
 	return null;
 }
