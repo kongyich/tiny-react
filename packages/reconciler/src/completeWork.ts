@@ -21,13 +21,13 @@ export const completeWork = (wip: FiberNode) => {
 				// 构建DOM
 				const instance = createInstance(wip.type);
 				// 将DOM插入DOM树中
-				appendAllChildren(instance, wip);
 				wip.stateNode = instance;
+				appendAllChildren(instance, wip);
 			}
 			bubbleProperties(wip);
 			return null;
 		case HostText:
-			if (current !== null || !wip.stateNode) {
+			if (current !== null || wip.stateNode) {
 				// update
 			} else {
 				// mount
@@ -51,7 +51,6 @@ export const completeWork = (wip: FiberNode) => {
 };
 
 const appendAllChildren = (parent: Container, wip: FiberNode) => {
-	// 遍历workInProgress所有子孙 DOM元素，依次挂载
 	let node = wip.child;
 
 	while (node !== null) {
