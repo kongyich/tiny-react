@@ -6,7 +6,8 @@
 	"scripts": {
 		"lint": "eslint --ext .js,.ts,.jsx,.tsx --fix --quiet ./packages",
 		"build:dev": "rimraf dist && rollup --bundleConfigAsCjs --config scripts/rollup/dev.config.js",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"demo": "vite serve demos/test-fc --config scripts/vite/vite.config.js --force"
 	},
 	"keywords": [],
 	"author": "",
@@ -26,7 +27,11 @@
 		"prettier": "^2.8.8",
 		"rimraf": "^5.0.1",
 		"rollup-plugin-generate-package-json": "^3.2.0",
-		"rollup-plugin-typescript2": "^0.34.1"
+		"rollup-plugin-typescript2": "^0.34.1",
+		"@types/react": "^18.2.15",
+		"@types/react-dom": "^18.2.7",
+		"@vitejs/plugin-react": "^4.0.3",
+		"vite": "^4.4.5"
 	},
 	"dependencies": {
 		"@rollup/plugin-replace": "^5.0.2",
