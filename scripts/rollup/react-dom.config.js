@@ -2,7 +2,7 @@ import { getPackageJSON, resolvePkgPath, getBaseRollupPlugins } from './utils';
 import generatePackageJson from 'rollup-plugin-generate-package-json';
 import alias from '@rollup/plugin-alias';
 
-const { name, module } = getPackageJSON('dom');
+const { name, module, peerDependencies } = getPackageJSON('dom');
 // react-dom包的路径
 const pkgPath = resolvePkgPath(name);
 // react-dom产物路径
@@ -24,6 +24,7 @@ export default [
 				format: 'umd'
 			}
 		],
+		external: [...Object.keys(peerDependencies)],
 		plugins: [
 			...getBaseRollupPlugins(),
 			// webpack resolve alias
