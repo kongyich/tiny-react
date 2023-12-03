@@ -1,6 +1,6 @@
 import { Container } from 'dom/src/hostConfig';
 import { FiberNode } from './fiber';
-import { NoFlags } from './fiberFlags';
+import { NoFlags, Update } from './fiberFlags';
 import {
 	appendInitialChild,
 	createInstance,
@@ -12,6 +12,10 @@ import {
 	HostRoot,
 	HostText
 } from './workTags';
+
+function markUpdate(fiber: FiberNode) {
+	fiber.flags |= Update;
+}
 
 export const completeWork = (wip: FiberNode) => {
 	// node
@@ -34,6 +38,11 @@ export const completeWork = (wip: FiberNode) => {
 		case HostText:
 			if (current !== null || wip.stateNode) {
 				// update
+				const oldText = current?.memoizedProps.content;
+				const newText = newProps.content;
+				if (oldText !== newText) {
+					markUpdate(wip);
+				}
 			} else {
 				// mount
 				// 构建DOM
