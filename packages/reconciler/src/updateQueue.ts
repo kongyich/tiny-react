@@ -37,9 +37,9 @@ export const enqueueUpdate = <State>(
 export const processUpdateQueue = <State>(
 	baseState: State,
 	pendingUpdate: Update<State> | null
-): { memoizeState: State } => {
+): { memoizedState: State } => {
 	const result: ReturnType<typeof processUpdateQueue<State>> = {
-		memoizeState: baseState
+		memoizedState: baseState
 	};
 
 	if (pendingUpdate !== null) {
@@ -47,10 +47,10 @@ export const processUpdateQueue = <State>(
 
 		if (action instanceof Function) {
 			// baseState 1 update (x) => 4x -> memoizeState 4
-			result.memoizeState = action(baseState);
+			result.memoizedState = action(baseState);
 		} else {
 			// baseState 1 update 2 -> memoizeState 2
-			result.memoizeState = action;
+			result.memoizedState = action;
 		}
 	}
 
