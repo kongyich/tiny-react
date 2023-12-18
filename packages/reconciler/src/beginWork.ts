@@ -44,8 +44,8 @@ function updateHostRoot(wip: FiberNode) {
 	const updateQueue = wip.updateQueue as UpdateQueue<Element>;
 	const pending = updateQueue.shared.pending;
 	updateQueue.shared.pending = null;
-	const { memoizeState } = processUpdateQueue(baseState, pending);
-	wip.memoizedState = memoizeState;
+	const { memoizedState } = processUpdateQueue(baseState, pending);
+	wip.memoizedState = memoizedState;
 
 	const nextChildren = wip.memoizedState;
 	reconcilerChildren(wip, nextChildren);

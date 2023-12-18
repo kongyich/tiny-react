@@ -128,7 +128,7 @@ function collectPaths(
 			}
 		}
 
-		targetElement = targetElement.parent as DOMElement;
+		targetElement = targetElement.parentNode as DOMElement;
 	}
 
 	return paths;
