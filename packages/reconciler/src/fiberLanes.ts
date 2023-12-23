@@ -6,9 +6,9 @@ export const NoLane = 0b0000;
 export const NoLanes = 0b0000;
 
 export function mergeLanes(laneA: Lane, laneB: Lane): Lanes {
-  return laneA | laneB;
+	return laneA | laneB;
 }
 
 export function requestUpdateLane() {
-  return SyncLane;
+	return SyncLane;
 }

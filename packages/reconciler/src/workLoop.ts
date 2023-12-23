@@ -82,6 +82,8 @@ function commitRoot(root: FiberRootNode) {
 
 		root.current = finishedWork;
 		// layout
+	} else {
+		root.current = finishedWork;
 	}
 }
 
