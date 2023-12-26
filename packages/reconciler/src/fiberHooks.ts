@@ -78,14 +78,9 @@ const HookDispatcherOnMount: Dispatcher = {
 	useEffect: mountEffect
 };
 
-// const HookDispatcherOnUpdate: Dispatcher = {
-// 	useState: updateState,
-// 	useEffect: updateEffect
-// };
-
-// function updateEffect() {
-// 	return null
-// }
+const HookDispatcherOnUpdate: Dispatcher = {
+	useState: updateState
+};
 
 function mountEffect(create: EffectCallback | void, deps: EffectDeps | void) {
 	const hook = mountWorkInprogressHook();
