@@ -12,7 +12,10 @@ import {
   // 调度函数
   unstable_scheduleCallback as scheduleCallback,
   // 是否用尽
-  unstable_shouldYield as shouldYield
+  unstable_shouldYield as shouldYield,
+  CallbackNode,
+  unstable_getFirstCallbackNode as getFirstCallbackNode,
+  unstable_cancelCallback as cancelCallback
 } from 'scheduler';
 
 const button = document.querySelector('button');
@@ -30,15 +33,32 @@ interface Work {
   priority: Priority;
 }
 const workList: Work[] = [];
+let prevPriority: Priority = IdlePriority;
+let curCallback: CallbackNode | null = null;
 
 function scheduler() {
+  const cbNode = getFirstCallbackNode();
+
   // 优先级排序
   const curWork = workList.sort((w1, w2) => w1.priority - w2.priority)[0];
 
-  // TODO 策略逻辑
-  const { priority } = curWork;
+  if (!curWork) {
+    curCallback = null;
+    cbNode && cancelCallback(cbNode);
+    return;
+  }
 
-  scheduleCallback(priority, perform.bind(null, curWork));
+  // TODO 策略逻辑
+  const { priority: curPriority } = curWork;
+
+  if (curPriority === prevPriority) {
+    return;
+  }
+
+  // 更高优先级
+  cbNode && cancelCallback(cbNode);
+
+  curCallback = scheduleCallback(curPriority, perform.bind(null, curWork));
 }
 
 function perform(work: Work, didTimeout?: boolean) {
@@ -57,11 +77,20 @@ function perform(work: Work, didTimeout?: boolean) {
   }
 
   // 执行完 || 终端执行
+  prevPriority = work.priority;
   if (!work.count) {
     const workIndex = workList.indexOf(work);
     workList.splice(workIndex, 1);
+    prevPriority = IdlePriority;
   }
+
+  const prevCb = curCallback;
   scheduler();
+  const curCb = curCallback;
+
+  if (curCb && prevCb === curCb) {
+    return perform.bind(null, work);
+  }
 }
 
 function insertSpan(content) {
@@ -71,10 +100,25 @@ function insertSpan(content) {
   root?.appendChild(span);
 }
 
-button &&
-  (button.onclick = () => {
-    workList.push({
-      count: 100
-    });
-    scheduler();
-  });
+[LowPriority, NormalPriority, UserBlockingPriority, ImmediatePriority].forEach(
+  (priority) => {
+    const button = document.createElement('button');
+    root?.appendChild(button);
+    button.innerText = [
+      '',
+      'ImmediatePriority',
+      'UserBlockingPriority',
+      'NormalPriority',
+      'LowPriority'
+    ][priority];
+
+    button &&
+      (button.onclick = () => {
+        workList.unshift({
+          count: 100,
+          priority: priority as Priority
+        });
+        scheduler();
+      });
+  }
+);
