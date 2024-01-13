@@ -198,7 +198,7 @@ function updateState<State>(): [State, Dispatch<State>] {
 	queue.shared.pending = null;
 
 	const current = currentHook as Hook;
-	const baseQueue = current.baseQueue;
+	let baseQueue = current.baseQueue;
 
 	if (pending !== null) {
 		// pending baseQueue update保存在current中
@@ -211,12 +211,20 @@ function updateState<State>(): [State, Dispatch<State>] {
 			pending.next = baseFirst;
 		}
 
-		const { memoizedState } = processUpdateQueue(
-			hook.memoizedState,
-			pending,
-			renderLane
-		);
-		hook.memoizedState = memoizedState;
+		baseQueue = pending;
+		current.baseQueue = pending;
+		queue.shared.pending = null;
+
+		if (baseQueue !== null) {
+			const {
+				memoizedState,
+				baseQueue: newBaseQueue,
+				baseState: newBaseState
+			} = processUpdateQueue(baseState, baseQueue, renderLane);
+			hook.memoizedState = memoizedState;
+			hook.baseState = newBaseState;
+			hook.baseQueue = newBaseQueue;
+		}
 	}
 
 	return [hook.memoizedState, queue.dispatch as Dispatch<State>];
@@ -250,7 +258,9 @@ function updateWorkInprogressHook(): Hook {
 	const newHook: Hook = {
 		memoizedState: currentHook.memoizedState,
 		updateQueue: currentHook.updateQueue,
-		next: null
+		next: null,
+		baseQueue: currentHook.baseQueue,
+		baseState: currentHook.baseState
 	};
 
 	if (workInProgressHook == null) {
@@ -308,7 +318,9 @@ function mountWorkInprogressHook(): Hook {
 	const hook: Hook = {
 		memoizedState: null,
 		updateQueue: null,
-		next: null
+		next: null,
+		baseQueue: null,
+		baseState: null
 	};
 
 	if (workInProgressHook == null) {
