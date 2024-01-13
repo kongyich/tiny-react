@@ -201,7 +201,7 @@ function updateState<State>(): [State, Dispatch<State>] {
 	let baseQueue = current.baseQueue;
 
 	if (pending !== null) {
-		// pending baseQueue update保存在current中
+		// pending baseQueue update保存在current
 
 		if (baseQueue !== null) {
 			const baseFirst = baseQueue.next;
