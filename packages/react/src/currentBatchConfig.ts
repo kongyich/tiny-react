@@ -1,9 +1,9 @@
 interface BatchConfig {
-  transition: number | null;
+	transition: number | null;
 }
 
 const ReactCurrentBatchConfig: BatchConfig = {
-  transition: null
+	transition: null
 };
 
 export default ReactCurrentBatchConfig;
