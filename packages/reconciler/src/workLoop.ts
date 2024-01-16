@@ -1,6 +1,6 @@
 import { scheduleMicroTask } from 'hostConfig';
 import { beginWork } from './beginWork';
-import { commitMutationEffects } from './commitWork';
+import { commitLayoutEffects, commitMutationEffects } from './commitWork';
 import { completeWork } from './completeWork';
 import {
 	FiberNode,
@@ -275,7 +275,9 @@ function commitRoot(root: FiberRootNode) {
 		commitMutationEffects(finishedWork, root);
 
 		root.current = finishedWork;
+
 		// layout
+		commitLayoutEffects(finishedWork, root);
 	} else {
 		root.current = finishedWork;
 	}
