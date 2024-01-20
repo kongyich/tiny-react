@@ -13,6 +13,7 @@ import { mountChildFibers, reconcilerChildFibers } from './childFibers';
 import { renderWithHooks } from './fiberHooks';
 import { Lane } from './fiberLanes';
 import { Ref } from './fiberFlags';
+import { pushProvider } from './fiberContext';
 
 // 递归中的递阶段
 export const beginWork = (wip: FiberNode, renderLane: Lane) => {
@@ -44,6 +45,8 @@ function updateContextProvider(wip: FiberNode) {
 	const providerType = wip.type;
 	const context = providerType.__context;
 	const newProps = wip.pendingProps;
+
+	pushProvider(context, newProps.value);
 
 	const nextChildren = newProps.children;
 
