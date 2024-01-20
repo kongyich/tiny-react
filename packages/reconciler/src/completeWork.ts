@@ -7,6 +7,7 @@ import {
 	createTextInstance
 } from 'hostConfig';
 import {
+	ContextProvider,
 	Fragment,
 	FunctionComponent,
 	HostComponent,
@@ -73,6 +74,9 @@ export const completeWork = (wip: FiberNode) => {
 		case HostRoot:
 		case FunctionComponent:
 		case Fragment:
+			bubbleProperties(wip);
+			return null;
+		case ContextProvider:
 			bubbleProperties(wip);
 			return null;
 		default:
