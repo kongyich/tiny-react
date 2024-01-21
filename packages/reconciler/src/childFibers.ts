@@ -198,7 +198,7 @@ function childReconciler(shouldTrackEffects: boolean) {
 
 		return firstNewFiber;
 	}
-
+	// ?
 	function getElementKeyToUse(element: any, index?: number) {
 		if (
 			Array.isArray(element) ||
