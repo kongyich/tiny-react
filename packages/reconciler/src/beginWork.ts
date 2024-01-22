@@ -1,11 +1,13 @@
-import { FiberNode } from './fiber';
+import { FiberNode, OffscreenProps } from './fiber';
 import {
 	ContextProvider,
 	Fragment,
 	FunctionComponent,
 	HostComponent,
 	HostRoot,
-	HostText
+	HostText,
+	OffscreenComponent,
+	SuspenseComponent
 } from './workTags';
 import { UpdateQueue, processUpdateQueue } from './updateQueue';
 import { ReactElementType } from 'shared/ReactTypes';
@@ -32,6 +34,10 @@ export const beginWork = (wip: FiberNode, renderLane: Lane) => {
 			return updateFragment(wip);
 		case ContextProvider:
 			return updateContextProvider(wip);
+		case SuspenseComponent:
+			return updateSuspenseComponent(wip);
+		case OffscreenComponent:
+			return updateOffscreenComponent(wip);
 		default:
 			if (__DEV__) {
 				console.warn('beginWork未实现的类型');
@@ -40,6 +46,55 @@ export const beginWork = (wip: FiberNode, renderLane: Lane) => {
 	}
 	return null;
 };
+
+function updateSuspenseComponent(wip: FiberNode) {
+	const current = wip.alternate;
+	const nextProps = wip.pendingProps;
+
+	let showFallback = false;
+	const didSuspend = true;
+
+	if (didSuspend) {
+		showFallback = true;
+	}
+
+	const nextPrimaryChildren = nextProps.children;
+	const nextFallbackChildren = nextProps.fallback;
+
+	if (current === null) {
+		// mount
+		if (showFallback) {
+			// 挂起
+		} else {
+			// 正常流程
+		}
+	} else {
+		// update
+		if (showFallback) {
+			// 挂起
+		} else {
+			// 正常流程
+		}
+	}
+}
+
+function mountSuspenseFallbackChildren(
+	wip: FiberNode,
+	primaryChildren: any,
+	fallbackChildren: any
+) {
+	const primaryChildProps: OffscreenProps = {
+		mode: 'hidden',
+		children: primaryChildren
+	};
+}
+
+function updateOffscreenComponent(wip: FiberNode) {
+	const nextProps = wip.pendingProps;
+	const nextChildren = nextProps.children;
+	reconcilerChildren(wip, nextChildren);
+	return wip.child;
+}
 
 function updateContextProvider(wip: FiberNode) {
 	const providerType = wip.type;
