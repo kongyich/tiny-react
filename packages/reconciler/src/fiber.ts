@@ -4,6 +4,7 @@ import {
 	Fragment,
 	FunctionComponent,
 	HostComponent,
+	OffscreenComponent,
 	SuspenseComponent,
 	WorkTags
 } from './workTags';
@@ -168,5 +169,12 @@ export function createFiberFromElement(element: ReactElementType) {
 
 export function createFiberFromFragment(elements: any[], key: Key): FiberNode {
 	const fiber = new FiberNode(Fragment, elements, key);
+	return fiber;
+}
+
+export function createFiberFromOffscreen(
+	pendingProps: OffscreenProps
+): FiberNode {
+	const fiber = new FiberNode(OffscreenComponent, pendingProps, null);
 	return fiber;
 }
