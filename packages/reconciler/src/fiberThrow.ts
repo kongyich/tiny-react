@@ -21,4 +21,18 @@ function attachPingListener(
 ) {
   const pingCache = root.pingCache;
   let threadIDs: Set<Lane> | undefined;
+
+  if (pingCache === null) {
+    threadIDs = new Set<Lane>();
+    pingCache = root.pingCache = new WeakMap<Wakeable<any>, Set<Lane>>();
+    pingCache.set(wakeable, threadIDs);
+  } else {
+    threadIDs = pingCache.get(wakeable);
+    if (threadIDs === undefined) {
+      threadIDs = new Set<Lane>();
+      pingCache.set(wakeable, threadIDs);
+    }
+  }
+
+  // continue
 }
