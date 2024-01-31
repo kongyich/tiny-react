@@ -35,4 +35,7 @@ function attachPingListener(
   }
 
   // continue
+  if (!threadIDs.has(lane)) {
+    // 第一次进入
+  }
 }
