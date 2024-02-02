@@ -35,6 +35,7 @@ import {
 import { Effect, resetHooksOnUnwind } from './fiberHooks';
 import { HookHasEffect, Passive } from './hookEffectTags';
 import { SuspenseException, getSuspenseThenable } from './thenable';
+import { throwException } from './fiberThrow';
 
 // 当前正在执行fiberNode
 let workInProgress: FiberNode | null = null;
@@ -66,7 +67,7 @@ export function scheduleUpdateOnFiber(fiber: FiberNode, lane: Lane) {
 	ensureRootIsScheduled(root);
 }
 
-function ensureRootIsScheduled(root: FiberRootNode) {
+export function ensureRootIsScheduled(root: FiberRootNode) {
 	const updateLane = getHighestPriorityLane(root.pendingLanes);
 	const existingCallback = root.callbackNode;
 
@@ -158,7 +159,7 @@ function performConcurrentWorkOnRoot(
 	}
 }
 
-function markRootUpdated(root: FiberRootNode, lane: Lane) {
+export function markRootUpdated(root: FiberRootNode, lane: Lane) {
 	root.pendingLanes = mergeLanes(root.pendingLanes, lane);
 }
 
@@ -192,6 +193,7 @@ function renderRoot(root: FiberRootNode, lane: Lane, shouldTimeSlice: boolean) {
 				const throwValue = wipThrowValue;
 				wipSuspendedReason = NotSuspended;
 				wipThrowValue = null;
+				throwAndUnwindWorkLoop(root, workInProgress, throwValue, lane);
 			}
 
 			shouldTimeSlice ? workLoopConcurrent() : workLoopSync;
@@ -227,7 +229,7 @@ function throwAndUnwindWorkLoop(
 	// 重置FC全局变量
 	resetHooksOnUnwind();
 	// 请求返回后重新出发更新
-
+	throwException(root, throwValue, lane);
 	// unwind
 }
 

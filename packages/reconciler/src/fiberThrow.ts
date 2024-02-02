@@ -1,6 +1,7 @@
 import { Wakeable } from 'shared/ReactTypes';
 import { FiberRootNode } from './fiber';
 import { Lane } from './fiberLanes';
+import { ensureRootIsScheduled, markRootUpdated } from './workLoop';
 
 export function throwException(root: FiberRootNode, value: any, lane: Lane) {
   // thenable
@@ -37,5 +38,17 @@ function attachPingListener(
   // continue
   if (!threadIDs.has(lane)) {
     // 第一次进入
+    threadIDs.add(lane);
+
+    function ping() {
+      if (pingCache !== null) {
+        pingCache.delete(wakeable);
+      }
+
+      markRootUpdated(root, lane);
+      ensureRootIsScheduled(root);
+    }
+
+    wakeable.then(ping, ping);
   }
 }
