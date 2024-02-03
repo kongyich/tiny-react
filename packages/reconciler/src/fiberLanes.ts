@@ -85,3 +85,7 @@ export function schedulerPriorityToLane(schedulerPriority: number) {
 export function isSubsetOfLanes(set: Lanes, subset: Lane) {
 	return (set & subset) === subset;
 }
+
+export function markRootSuspended() {
+	// ignore
+}
