@@ -5,26 +5,26 @@ import { popSuspenseHandler } from './suspenseContext';
 import { ContextProvider, SuspenseComponent } from './workTags';
 
 export function unwindWork(wip: FiberNode) {
-  const flags = wip.flags;
+	const flags = wip.flags;
 
-  switch (flags) {
-    case SuspenseComponent:
-      popSuspenseHandler();
-      if (
-        (flags & ShouldCapture) !== NoFlags &&
-        (flags & DidCapture) == NoFlags
-      ) {
-        wip.flags = (flags & ~ShouldCapture) | DidCapture;
-        return wip;
-      }
-      break;
-    case ContextProvider:
-      const context = wip.type._context;
-      popProvider(context);
-      return null;
-    default:
-      return null;
-  }
+	switch (flags) {
+		case SuspenseComponent:
+			popSuspenseHandler();
+			if (
+				(flags & ShouldCapture) !== NoFlags &&
+				(flags & DidCapture) == NoFlags
+			) {
+				wip.flags = (flags & ~ShouldCapture) | DidCapture;
+				return wip;
+			}
+			break;
+		case ContextProvider:
+			const context = wip.type._context;
+			popProvider(context);
+			return null;
+		default:
+			return null;
+	}
 
-  return null;
+	return null;
 }
