@@ -36,6 +36,7 @@ import { Effect, resetHooksOnUnwind } from './fiberHooks';
 import { HookHasEffect, Passive } from './hookEffectTags';
 import { SuspenseException, getSuspenseThenable } from './thenable';
 import { throwException } from './fiberThrow';
+import { unwindWork } from './fiberUnwindFiber';
 
 // 当前正在执行fiberNode
 let workInProgress: FiberNode | null = null;
@@ -231,6 +232,30 @@ function throwAndUnwindWorkLoop(
 	// 请求返回后重新出发更新
 	throwException(root, throwValue, lane);
 	// unwind
+
+	unwindUnitOfWork(unitOfWork);
+}
+
+function unwindUnitOfWork(unitOfWork: FiberNode) {
+	let incompleteWork: FiberNode | null = unitOfWork;
+
+	do {
+		const next = unwindWork(incompleteWork);
+
+		if (next !== null) {
+			workInProgress = next;
+			return;
+		}
+
+		const returnFiber = incompleteWork.return as FiberNode;
+		if (returnFiber !== null) {
+			returnFiber.deletions = null;
+		}
+		incompleteWork = returnFiber;
+	} while (incompleteWork !== null);
+
+	// 使用use，出来了data，但是没有定义suspense
+	workInProgress = null;
 }
 
 function handleThrow(root: FiberRootNode, throwValue: any) {

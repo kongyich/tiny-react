@@ -2,6 +2,8 @@ import { Wakeable } from 'shared/ReactTypes';
 import { FiberRootNode } from './fiber';
 import { Lane } from './fiberLanes';
 import { ensureRootIsScheduled, markRootUpdated } from './workLoop';
+import { getSuspenseHandler } from './suspenseContext';
+import { ShouldCapture } from './fiberFlags';
 
 export function throwException(root: FiberRootNode, value: any, lane: Lane) {
   // thenable
@@ -11,6 +13,12 @@ export function throwException(root: FiberRootNode, value: any, lane: Lane) {
     typeof value.then === 'function'
   ) {
     const wakeable: Wakeable<any> = value;
+
+    const suspenseBoundary = getSuspenseHandler();
+    if (suspenseBoundary) {
+      suspenseBoundary.flags |= ShouldCapture;
+    }
+
     attachPingListener(root, wakeable, lane);
   }
 }
@@ -34,20 +42,19 @@ function attachPingListener(
       pingCache.set(wakeable, threadIDs);
     }
   }
+  function ping() {
+    if (pingCache !== null) {
+      pingCache.delete(wakeable);
+    }
+
+    markRootUpdated(root, lane);
+    ensureRootIsScheduled(root);
+  }
 
   // continue
   if (!threadIDs.has(lane)) {
     // 第一次进入
     threadIDs.add(lane);
-
-    function ping() {
-      if (pingCache !== null) {
-        pingCache.delete(wakeable);
-      }
-
-      markRootUpdated(root, lane);
-      ensureRootIsScheduled(root);
-    }
 
     wakeable.then(ping, ping);
   }

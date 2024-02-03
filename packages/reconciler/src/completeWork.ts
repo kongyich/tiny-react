@@ -18,6 +18,7 @@ import {
 } from './workTags';
 import { updateFiberProps } from 'dom/src/SyntheticEvent';
 import { popProvider } from './fiberContext';
+import { popSuspenseHandler } from './suspenseContext';
 
 function markRef(fiber: FiberNode) {
 	fiber.flags |= Ref;
@@ -86,6 +87,7 @@ export const completeWork = (wip: FiberNode) => {
 			bubbleProperties(wip);
 			return null;
 		case SuspenseComponent:
+			popSuspenseHandler();
 			const offscreenFiber = wip.child as FiberNode;
 			const isHidden = offscreenFiber.pendingProps.mode === 'hidden';
 			const currentOffscreenFiber = offscreenFiber.alternate;
