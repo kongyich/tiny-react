@@ -20,7 +20,9 @@ import {
 	NoLane,
 	SyncLane,
 	getHighestPriorityLane,
+	getNextLane,
 	lanesToSchedulerPriority,
+	markRootSuspended,
 	markRootfinished,
 	mergeLanes
 } from './fiberLanes';
@@ -84,7 +86,7 @@ export function scheduleUpdateOnFiber(fiber: FiberNode, lane: Lane) {
 }
 
 export function ensureRootIsScheduled(root: FiberRootNode) {
-	const updateLane = getHighestPriorityLane(root.pendingLanes);
+	const updateLane = getNextLane(root);
 	const existingCallback = root.callbackNode;
 
 	if (updateLane === NoLane) {
@@ -142,7 +144,7 @@ function performConcurrentWorkOnRoot(
 		}
 	}
 
-	const lane = getHighestPriorityLane(root.pendingLanes);
+	const lane = getNextLane(root);
 	// const curCallbackNode = root.callbackNode;
 	if (lane === NoLane) {
 		return null;
@@ -172,6 +174,7 @@ function performConcurrentWorkOnRoot(
 			break;
 		case RootDidNotComplete:
 			wipRootRenderLane = NoLane;
+			markRootSuspended(root, lane);
 			ensureRootIsScheduled(root);
 			break;
 		default:
@@ -299,7 +302,7 @@ function handleThrow(root: FiberRootNode, throwValue: any) {
 }
 
 function performSyncWorkOnRoot(root: FiberRootNode) {
-	const nextLane = getHighestPriorityLane(root.pendingLanes);
+	const nextLane = getNextLane(root);
 
 	if (nextLane !== SyncLane) {
 		// 比SyncLane优先级低的
@@ -321,6 +324,7 @@ function performSyncWorkOnRoot(root: FiberRootNode) {
 			break;
 		case RootDidNotComplete:
 			wipRootRenderLane = NoLane;
+			markRootSuspended(root, nextLane);
 			ensureRootIsScheduled(root);
 			break;
 
